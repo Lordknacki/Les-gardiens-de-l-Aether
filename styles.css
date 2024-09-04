@@ -20,9 +20,23 @@ body, html {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    background-color: lightgray;
+    border: none;
+    border-radius: 5px;
+}
+
+#actionArea button.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
 }
 
 #logArea {
     margin-top: 20px;
     color: red;
+    height: 100px;
+    overflow-y: scroll;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 5px;
 }
