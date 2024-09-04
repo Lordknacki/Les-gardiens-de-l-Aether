@@ -14,9 +14,10 @@
             <p id="monsterStatus">Gobelin PV: 30 | MP: 10</p>
         </div>
         <div id="actionArea">
-            <button onclick="performAction('attack')">Attaquer</button>
-            <button onclick="performAction('defend')">Défendre</button>
-            <button onclick="performAction('heal')">Soigner</button>
+            <button id="attack" onclick="performAction(hero, monster, 'Charge')">Charge</button>
+            <button id="defend" onclick="performAction(hero, monster, 'Renforcement')">Renforcement</button>
+            <button id="heal" onclick="performAction(hero, hero, 'Premiers soins')">Premiers soins</button>
+            <button id="finalSword" onclick="performAction(hero, monster, 'Final sword')">Final sword</button>
         </div>
         <div id="logArea"></div>
     </div>
