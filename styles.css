@@ -33,8 +33,8 @@ body, html {
 
 #logArea {
     margin-top: 20px;
-    color: red;
-    height: 100px;
+    color: black;
+    height: 150px;
     overflow-y: scroll;
     background: #f4f4f4;
     border: 1px solid #ccc;
