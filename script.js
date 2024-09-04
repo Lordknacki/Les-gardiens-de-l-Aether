@@ -55,11 +55,15 @@ function logAction(message) {
 function checkEndGame() {
     if (!hero.isAlive()) {
         logAction("Défaite! Le guerrier est tombé au combat.");
-        document.querySelectorAll('#actionArea button').forEach(button => button.disabled = true);
+        endGame();
     } else if (!monster.isAlive()) {
         logAction("Victoire! Le gobelin a été vaincu.");
-        document.querySelectorAll('#actionArea button').forEach(button => button.disabled = true);
+        endGame();
     }
+}
+
+function endGame() {
+    document.querySelectorAll('#actionArea button').forEach(button => button.disabled = true);
 }
 
 function performAction(character, target, action) {
@@ -73,7 +77,7 @@ function performAction(character, target, action) {
         logAction(`${character.name} tente d'utiliser ${action} mais échoue.`);
     }
 
-    // Tour du monstre si le héros vient de jouer
+    // Tour du monstre si le héros vient de jouer et que le monstre est toujours vivant
     if (character === hero && monster.isAlive()) {
         setTimeout(() => monsterAction(monster, hero), 1000);
     }
@@ -84,6 +88,14 @@ function monsterAction(monster, hero) {
     let actions = Object.keys(monster.abilities);
     let action = actions[Math.floor(Math.random() * actions.length)];
     performAction(monster, hero, action);
+}
+
+function abilitySuccess(rate) {
+    return Math.random() < rate;
+}
+
+function calculateDamage(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function executeAction(character, target, ability, action) {
