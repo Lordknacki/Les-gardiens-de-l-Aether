@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Gardiens d'Aether</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <h1>Les Gardiens d'Aether</h1>
+        <div id="statusArea">
+            <p id="heroStatus">Guerrier PV: 100 | MP: 30</p>
+            <p id="monsterStatus">Gobelin PV: 30 | MP: 10</p>
+        </div>
+        <div id="actionArea">
+            <button onclick="performAction('attack')">Attaquer</button>
+            <button onclick="performAction('defend')">Défendre</button>
+            <button onclick="performAction('heal')">Soigner</button>
+        </div>
+        <div id="logArea"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
