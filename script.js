@@ -42,7 +42,7 @@ function updateStatus() {
 
 function updateActionButtons() {
     document.querySelectorAll('#actionArea button').forEach(button => {
-        button.disabled = !hero.isAlive();
+        button.disabled = !hero.isAlive() || !monster.isAlive();
     });
 }
 
@@ -77,11 +77,13 @@ function performAction(character, target, action) {
         logAction(`${character.name} tente d'utiliser ${action} mais échoue.`);
     }
 
-    // Tour du monstre si le héros vient de jouer et que le monstre est toujours vivant
-    if (character === hero && monster.isAlive()) {
-        setTimeout(() => monsterAction(monster, hero), 1000);
-    }
     updateStatus();
+    if (character === hero && monster.isAlive()) {
+        setTimeout(() => {
+            if (!monster.isAlive() || checkEndGame()) return;
+            monsterAction(monster, hero);
+        }, 1000);
+    }
 }
 
 function monsterAction(monster, hero) {
