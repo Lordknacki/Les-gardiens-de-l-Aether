@@ -55,8 +55,8 @@ function updateActionButtons() {
 
 function logAction(message) {
     const logArea = document.getElementById('logArea');
-    logArea.textContent += message + "\n";
-    logArea.scrollTop = logArea.scrollHeight;
+    logArea.innerHTML += `<div>${message}</div>`; // Add each action as a new line
+    logArea.scrollTop = logArea.scrollHeight; // Auto-scroll to the latest action
 }
 
 function performAction(character, target, action) {
