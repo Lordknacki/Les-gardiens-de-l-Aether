@@ -17,16 +17,8 @@ class Character {
     }
 
     heal(amount) {
-        this.hp = Math.min(this.hp + amount, 100); // assuming 100 is max HP for simplicity
+        this.hp = Math.min(this.hp + amount, 100);
     }
-}
-
-function abilitySuccess(rate) {
-    return Math.random() < rate;
-}
-
-function calculateDamage(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 let hero = new Character('Guerrier', 100, 20, 10, 5, {
@@ -42,34 +34,56 @@ let monster = new Character('Gobelin', 30, 10, 5, 7, {
 });
 
 function updateStatus() {
-    document.getElementById('heroStatus').textContent = `${hero.name} PV: ${hero.hp}`;
-    document.getElementById('monsterStatus').textContent = `${monster.name} PV: ${monster.hp}`;
+    document.getElementById('heroStatus').textContent = `Guerrier PV: ${hero.hp}`;
+    document.getElementById('monsterStatus').textContent = `Gobelin PV: ${monster.hp}`;
     updateActionButtons();
+    checkEndGame();
 }
 
 function updateActionButtons() {
     document.querySelectorAll('#actionArea button').forEach(button => {
-        button.disabled = !hero.isAlive(); // Only disable buttons if hero is not alive
+        button.disabled = !hero.isAlive();
     });
 }
 
 function logAction(message) {
     const logArea = document.getElementById('logArea');
-    logArea.innerHTML += `<div>${message}</div>`; // Add each action as a new line
-    logArea.scrollTop = logArea.scrollHeight; // Auto-scroll to the latest action
+    logArea.innerHTML += `<div>${message}</div>`;
+    logArea.scrollTop = logArea.scrollHeight;
+}
+
+function checkEndGame() {
+    if (!hero.isAlive()) {
+        logAction("Défaite! Le guerrier est tombé au combat.");
+        document.querySelectorAll('#actionArea button').forEach(button => button.disabled = true);
+    } else if (!monster.isAlive()) {
+        logAction("Victoire! Le gobelin a été vaincu.");
+        document.querySelectorAll('#actionArea button').forEach(button => button.disabled = true);
+    }
 }
 
 function performAction(character, target, action) {
-    if (!character.isAlive()) return; // Do not perform any action if character is not alive
+    if (!character.isAlive() || !target.isAlive()) return;
 
     let ability = character.abilities[action];
     if (abilitySuccess(ability.successRate)) {
         let actionResult = executeAction(character, target, ability, action);
-        logAction(`${character.name} uses ${action} and ${actionResult}`);
+        logAction(`${character.name} utilise ${action} et ${actionResult}`);
     } else {
-        logAction(`${character.name} uses ${action} but fails`);
+        logAction(`${character.name} tente d'utiliser ${action} mais échoue.`);
+    }
+
+    // Tour du monstre si le héros vient de jouer
+    if (character === hero && monster.isAlive()) {
+        setTimeout(() => monsterAction(monster, hero), 1000);
     }
     updateStatus();
+}
+
+function monsterAction(monster, hero) {
+    let actions = Object.keys(monster.abilities);
+    let action = actions[Math.floor(Math.random() * actions.length)];
+    performAction(monster, hero, action);
 }
 
 function executeAction(character, target, ability, action) {
@@ -79,16 +93,14 @@ function executeAction(character, target, ability, action) {
             damage = ability.critDamage;
         }
         target.takeDamage(damage);
-        return `deals ${damage} damage to ${target.name}`;
+        return `inflige ${damage} dégâts à ${target.name}`;
     } else if (action === "Premiers soins") {
         let healAmount = calculateDamage(ability.minHeal, ability.maxHeal);
         if (abilitySuccess(ability.critRate)) {
             healAmount = ability.critHeal;
         }
         character.heal(healAmount);
-        return `heals ${healAmount} HP`;
+        return `se soigne de ${healAmount} PV`;
     }
     return '';
 }
-
-updateStatus();
